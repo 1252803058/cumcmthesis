@@ -2,6 +2,10 @@
 %!TEX program  = xelatex
 \documentclass[bwprint]{cumcmthesis}
 %\documentclass[withoutpreface,bwprint]{cumcmthesis} %去掉封面与编号页
+
+\usepackage{tikz,mathpazo}
+\usetikzlibrary{shapes.geometric, arrows}
+
 \title{平行束CT系统参数标定及成像}
 \tihao{A}
 \baominghao{报名号}
@@ -48,14 +52,66 @@ CT系统安装时往往存在误差，从而影响成像质量，因此需要对
 \section{符号说明}
 \begin{tabular}{cc}
 	\hline
-	\makebox[0.3\textwidth][l]{符号}	&  \makebox[0.6\textwidth][l]{定义} \\ \hline
-	\textit{a_{i}}	    & 去 0 处理后的信息\\ \hline
-	\textit{n_{i}}	    & 对应信息的长度 \\ \hline
-	\textit{d}	        & 中文测试 \\ \hline
+	\makebox[0.3\textwidth][c]{符号}	&  \makebox[0.6\textwidth][c]{定义} \\ \hline
+    $\textit{a}_{i} $ & 去 0 处理后的信息\\ \hline
+	$\textit{n}_{i} $ & $a_{i}$对应信息的长度 \\ \hline
+	\textit{d} & 相邻两单元之间的距离 \\ \hline
+	$\Delta$$\textit{x}$、$\Delta$$\textit{y}$ & X轴、Y轴方向的偏移量 \\ \hline
+	$\Delta$$\overline{\theta}$ & 每转动一次转过的角度 \\ \hline
+	$\varphi$ & 标定时的旋转角度 \\ \hline
+	$\mu$ & 吸收率 \\ \hline
+	
 \end{tabular}
 
+\section{问题分析}
+CT（computed tomography）作为一种重要的无损检测技术已广泛应用于国防，医学 影响和化工等领域。本文拟对平行束 CT 系统参数标定及成像问题进行建模和研究。
+\subsection{问题一}
+问题一要求我们根据标定模板在 CT 系统成像时的相关信息，确定 CT 系统旋转中 心在正方形托盘中的位置、探测器单元之间的距离以及该 CT 系统使用的 X 射线的 180 个方向。 我们首先确立了以椭圆中心为原点，短轴所在延长线为 X 轴（正方向为右），长轴 所在延长线为 Y 轴（正方向为上）的直角坐标系。通过分析探测器接收到的信息以及托 盘内两个标定模版的位置信息，我们计算得到了每个探测器单元之间的距离。然后，通 过分析射线平行于 X 轴和 Y 轴入射时探测器单元接收到的信息以及探测器正对于托盘 中心旋转时，和探测器正对于旋转中心旋转时的位置关系，确定了旋转中心相对于托盘 中心的偏移量，进而求得了旋转中心的坐标。最后，我们在探测器接收到的数据中确定 了平行于 X 轴和 Y 轴时探测器所在的角度，进而根据假设一推算出了探测器旋转时 180 个方向的角度。
+
+\subsection{问题二}
+问题二要求我们利用上述 CT 系统得到的某未知介质的接收信息，以及问题一中得 到的标定参数，确定该未知介质在正方形托盘中的位置、几何形状和吸收率等信息。还 要求我们具体给出 10 个图中位置的吸收率。 首先，我们根据 CT 成像原理以及问题一求得的标定参数建立了平行束二维 CT 系 统图像标定模型。该模型可将 CT 扫描后得到的待标定图像进行旋转，平移，还有大小 调整转化为实际扫描时介质的形态。然后通过将正方形托盘实际边长与像素点的换算， 以及托盘中心和旋转中心的相对位置，进而在以旋转中心为原点，平行和垂直于于托盘 左边 X、Y 轴的平面直角坐标系中将托盘和介质都绘制出来，继而可通过取点计算得到 该介质上任何一点的坐标。最后，我们将待标定图像进行调整时 Radon 逆函数所求得的 数值缩放为 256×256 的数据（即射线吸收率数据），将附件 4 中 10 个点根据坐标一一 对应与该数据表进而求得这十个点的射线吸收率。
+\subsection{问题三}
+问题三要求我们利用另一个未知介质的 CT 接收信息以及之前所求得的标定参数， 给出该未知介质的相关信息。另外，请具体给出图 3 所给的 10 个位置处的吸收率。 首先，我们利用问题二中所建立的模型将图片还原为 CT 扫描时的实际形态。然后 利用正方形托盘中心与旋转中心的相对位置，以及实际边长与像素点的换算关系，将托 盘和还原后的图片共同绘制在如问题二所述的平面直角坐标系中。最后，同问题二，将 Radon 逆函数求得的数据缩放，进而可求得未知介质以及附件 4 中 10 个位置的吸收率。
+
+\subsection{问题四}
+问题四要求我们分析问题一中参数标定的精度和稳定性。在此基础上自行设计新模 板、建立对应的标定模型，以改进标定精度和稳定性，并说明理由。 首先，基于问题一的计算过程，我们对于探测器单元距离，旋转中心较托盘中心的 坐标偏移量以及探测器每旋转一个方向时的角度进行可能的取值分析。将各个变量的可 能取值代入到问题二中未知介质的 CT 扫描情形下对其进行标定，通过计算并比较各取 值条件下圆盘中心的吸收率进而探究问题一中参数标定的稳定性程度。对于参数标定的 精度，我们主要通过各个参数可能的取值范围来讨论。 然后，为了进一步提高标定时的提高精度和稳定度，我们设计了一个较为锐利的等 腰直角三角形图案（边缘有缺损），利用问题一中的方法和问题二中所建立的二维 CT系统图像标定模型再次计算相关参数。通过分析其求解过程中各参数可能的取值，以及 各取值情况下圆盘中心的吸收率观察参数标定的稳定性以及精度。
+\subsection{思路总结}
+综上所述，对于平行束 CT 系统参数标定及成像问题问题可以通过下图所示流程图进行 求解
+%绘图
 
 
+
+% 流程图定义基本形状
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,-&gt;,&gt;=stealth]
+ 
+\begin{tikzpicture}[node distance=2cm]
+ %定义流程图具体形状
+\node (start) [startstop] {Start};
+\node (in1) [io, below of=start] {Input};
+\node (pro1) [process, below of=in1] {Process 1};
+\node (dec1) [decision, below of=pro1, yshift=-0.5cm] {Decision 1};
+\node (pro2a) [process, below of=dec1, yshift=-0.5cm] {Process 2a};
+\node (pro2b) [process, right of=dec1, xshift=2cm] {Process 2b};
+\node (out1) [io, below of=pro2a] {Output};
+\node (stop) [startstop, below of=out1] {Stop};
+ 
+ %连接具体形状
+\draw [line](start) -- (in1);
+%\draw [arrow](in1) -- (pro1);
+%\draw [arrow](pro1) -- (dec1);
+%\draw [arrow](dec1) -- (pro2a);
+%\draw [arrow](dec1) -- (pro2b);
+%\draw [arrow](dec1) -- node[anchor=east] {yes} (pro2a);
+%\draw [arrow](dec1) -- node[anchor=south] {no} (pro2b);
+%\draw [arrow](pro2b) |- (pro1);
+%\draw [arrow](pro2a) -- (out1);
+%\draw [arrow](out1) -- (stop);
+\end{tikzpicture}
+%%%%%%%%%%%%%%%%%%%
 \subsection{公式1}
 
 \[
