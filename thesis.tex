@@ -35,10 +35,13 @@
 CT(Computed Tomography)可以在不破坏样品的情况下，利用样品对射线能量的吸收特性对生物组织和工程材料的样品进行断层成像，由此获取样品内部的结构信息。一种典型的二维CT系统如图1所示，平行入射的X射线垂直于探测器平面，每个探测器单元看成一个接收点，且等距排列。X射线的发射器和探测器相对位置固定不变，整个发射-接收系统绕某固定的旋转中心逆时针旋转180次。对每一个X射线方向，在具有512个等距单元的探测器上测量经位置固定不动的二维待检测介质吸收衰减后的射线能量，并经过增益等处理后得到180组接收信息。
 CT系统安装时往往存在误差，从而影响成像质量，因此需要对安装好的CT系统进行参数标定，即借助于已知结构的样品（称为模板）标定CT系统的参数，并据此对未知结构的样品进行成像。
 请建立相应的数学模型和算法，解决以下问题：
-(1) 在正方形托盘上放置两个均匀固体介质组成的标定模板，模板的几何信息如图2所示，相应的数据文件见附件1，其中每一点的数值反映了该点的吸收强度，这里称为"吸收率"。对应于该模板的接收信息见附件2。请根据这一模板及其接收信息，确定CT系统旋转中心在正方形托盘中的位置、探测器单元之间的距离以及该CT系统使用的X射线的180个方向。
-(2) 附件3是利用上述CT系统得到的某未知介质的接收信息。利用(1)中得到的标定参数，确定该未知介质在正方形托盘中的位置、几何形状和吸收率等信息。另外，请具体给出图3所给的10个位置处的吸收率，相应的数据文件见附件4。
-(3) 附件5是利用上述CT系统得到的另一个未知介质的接收信息。利用(1)中得到的标定参数，给出该未知介质的相关信息。另外，请具体给出图3所给的10个位置处的吸收率。
-(4) 分析(1)中参数标定的精度和稳定性。在此基础上自行设计新模板、建立对应的标定模型，以改进标定精度和稳定性，并说明理由。
+\begin{description}
+\item (1)在正方形托盘上放置两个均匀固体介质组成的标定模板，模板的几何信息如图2所示，相应的数据文件见附件1，其中每一点的数值反映了该点的吸收强度，这里称为"吸收率"。对应于该模板的接收信息见附件2。请根据这一模板及其接收信息，确定CT系统旋转中心在正方形托盘中的位置、探测器单元之间的距离以及该CT系统使用的X射线的180个方向。
+\item (2) 附件3是利用上述CT系统得到的某未知介质的接收信息。利用(1)中得到的标定参数，确定该未知介质在正方形托盘中的位置、几何形状和吸收率等信息。另外，请具体给出图3所给的10个位置处的吸收率，相应的数据文件见附件4。
+\item (3) 附件5是利用上述CT系统得到的另一个未知介质的接收信息。利用(1)中得到的标定参数，给出该未知介质的相关信息。另外，请具体给出图3所给的10个位置处的吸收率。
+\item (4) 分析(1)中参数标定的精度和稳定性。在此基础上自行设计新模板、建立对应的标定模型，以改进标定精度和稳定性，并说明理由。
+\end{description}
+
 
 \section{模型假设}
 \begin{enumerate}
@@ -79,40 +82,81 @@ CT（computed tomography）作为一种重要的无损检测技术已广泛应�
 综上所述，对于平行束 CT 系统参数标定及成像问题问题可以通过下图所示流程图进行 求解
 %绘图
 
+%\begin{tikzpicture}
+%    [every node/.style={fill=blue!30,draw=white!70,rounded corners},
+%     edge from parent/.style={thick,draw}]
+%%        \node (a){a}
+%        \node [below of=a]{root}
+%            child {node {a1}}
+%            child {node {a2}
+%                child {node {b1}}
+%                child {node {b2}}}
+%            child {node {a3}};
+% \end{tikzpicture}
 
-
-% 流程图定义基本形状
-\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
-\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
-\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
-\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
-\tikzstyle{arrow} = [thick,-&gt;,&gt;=stealth]
- 
-\begin{tikzpicture}[node distance=2cm]
- %定义流程图具体形状
-\node (start) [startstop] {Start};
-\node (in1) [io, below of=start] {Input};
-\node (pro1) [process, below of=in1] {Process 1};
-\node (dec1) [decision, below of=pro1, yshift=-0.5cm] {Decision 1};
-\node (pro2a) [process, below of=dec1, yshift=-0.5cm] {Process 2a};
-\node (pro2b) [process, right of=dec1, xshift=2cm] {Process 2b};
-\node (out1) [io, below of=pro2a] {Output};
-\node (stop) [startstop, below of=out1] {Stop};
- 
- %连接具体形状
-\draw [line](start) -- (in1);
-%\draw [arrow](in1) -- (pro1);
-%\draw [arrow](pro1) -- (dec1);
-%\draw [arrow](dec1) -- (pro2a);
-%\draw [arrow](dec1) -- (pro2b);
-%\draw [arrow](dec1) -- node[anchor=east] {yes} (pro2a);
-%\draw [arrow](dec1) -- node[anchor=south] {no} (pro2b);
-%\draw [arrow](pro2b) |- (pro1);
-%\draw [arrow](pro2a) -- (out1);
-%\draw [arrow](out1) -- (stop);
-\end{tikzpicture}
+%% 流程图定义基本形状
+%\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm,text centered, draw=black, fill=red!30]
+%\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=blue!30]
+%\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+%\tikzstyle{decision} = [diamond, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=green!30]
+%\tikzstyle{arrow} = [thick,-&gt;,&gt;=stealth]
+% 
+%\begin{center}
+%
+%\begin{tikzpicture}[node distance=2cm]
+% %定义流程图具体形状
+%\node (start) [startstop] {Start};
+%\node (in1) [io, below of=start] {Input};
+%\node (pro1) [process, below of=in1] {Process 1};
+%\node (dec1) [decision, below of=pro1, yshift=-0.5cm] {Decision 1};
+%\node (pro2a) [process, below of=dec1, yshift=-0.5cm] {Process 2a};
+%\node (pro2b) [process, right of=dec1, xshift=2cm] {Process 2b};
+%\node (out1) [io, below of=pro2a] {Output};
+%\node (stop) [startstop, below of=out1] {Stop};
+% 
+% %连接具体形状
+%\draw [->,ultra thick](start) -- (in1);
+%\draw [->,ultra thick](in1) -- (pro1);
+%\draw [->,ultra thick](pro1) -- (dec1);
+%\draw [->,ultra thick](dec1) -- (pro2a);
+%\draw [->,ultra thick](dec1) -- (pro2b);
+%\draw [->,ultra thick](dec1) -- node[anchor=east] {yes} (pro2a);
+%\draw [->,ultra thick](dec1) -- node[anchor=south] {no} (pro2b);
+%\draw [->,ultra thick](pro2b) |- (pro1);
+%%\draw [->](pro2a) -- (out1);
+%%\draw [->](out1) -- (stop);
+%\end{tikzpicture}
+%\end{center}
 %%%%%%%%%%%%%%%%%%%
+\subsection{模型的建立与求解}
+\subsection{问题一：CT系统参数的标定}
+\subsubsection{平面直角坐标系的建立}
+以正方形托盘中心为原点，分别以椭圆短轴为 X 轴方向，长轴方向为 Y 轴方向建立如所示的坐标系。设椭圆和圆中心的坐标分别为，其坐标经计算分别为。
+%%%%%图片
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture} 
+	\draw [thick] (-50mm,-50mm) rectangle (50mm,50mm);
+	\draw [fill=gray, ultra thick] (0mm,0mm) ellipse (15mm and 40mm);
+	\draw [fill=gray, ultra thick] (45mm,0mm) circle [radius=4mm];
+	\draw [<->, thick] (0mm,70mm)--(0,0)--(70mm,0);
+	\draw [fill](0,0) circle [radius=0.5mm];
+	\node [below] at (0,0) {$O_1 (0,0)$};
+	\draw [fill](45mm,0) circle [radius=0.5mm];
+	\node [below] at (43mm,-4mm) {$O_2 (45,0)$};
+	\node [above] at (60mm,0) {$\textit{X}$};
+	\node [right] at (0mm,60mm) {$\textit{Y}$};
+\end{tikzpicture}
+\caption{参数标定平面直角坐标系}
+\end{figure}
+
+
+
+
 \subsection{公式1}
+\subsection{公式1}
+\subsection{公式1}
+
 
 \[
 \begin{pmatrix}{*{20}c}
