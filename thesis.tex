@@ -132,7 +132,7 @@ CT（computed tomography）作为一种重要的无损检测技术已广泛应�
 \subsection{问题一：CT系统参数的标定}
 \subsubsection{平面直角坐标系的建立}
 以正方形托盘中心为原点，分别以椭圆短轴为 X 轴方向，长轴方向为 Y 轴方向建立如所示的坐标系。设椭圆和圆中心的坐标分别为，其坐标经计算分别为。
-%%%%%图片
+%%%%%图1
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture} 
@@ -149,12 +149,104 @@ CT（computed tomography）作为一种重要的无损检测技术已广泛应�
 \end{tikzpicture}
 \caption{参数标定平面直角坐标系}
 \end{figure}
+%%%%%%%
+\subsection{二维 CT 照射分析}
+为便于分析理解，我们取射线方向平行于 X 轴方向与射线方向平行于 Y 轴方向时的 情况进行分析。
+当射线方向平行于 X 轴方向照射时（如图\ref{附件2中第61个方向示意}），射线此时穿过的椭圆截面是 其环绕一圈中最大的，即此时位于图中 l 4 范围内的探测器均可以探测到标定物的吸收信息。在附件2的数据中（如图 3 所示），横向的 180 列代表的是 180 个方向，纵向的 512 行代表的是探测器单元。因此，若我们认为每个单元格是一个像素的情况下，射线平行 X 轴照射时对应于图 3 中的 n 4 （其所对应的数据列数为 61 列），即接此时是收到信息的 探测器数量最多的情形。
+同理，当射线方向平行于 Y 轴方向照射时（如图 2-2 所示），l 1 和 l 2 范围内的探测 器将可以分布探测到椭圆和圆两者的信息（分别对应于图 3 中的 n 1 ， n 2 ）。此外，椭圆 和圆的间距此时在探测器上的投影也是 CT 成像过程中最大的时候（分别对应于图 3 中 的 n 3 ，其所对应的数据列数为 151 列）。
+
+不仅如此，在两种状态下，过椭圆中心的射线穿过的物体距离最长（平行于 Y 轴的 射线过椭圆终点被探测器接受到的数据位于图三中的 n 5 位置）。
+
+%%%%%%%%%%%%%%%并排放
+
+\begin{figure}[htbp]
+\centering
+\begin{minipage}{2pt}
+\centering
+\begin{tikzpicture}[scale=0.5]%射线方向平行于X方向
+
+%\draw[help lines] (-100mm,-100mm) grid (100mm,100mm);
+
+	\draw [thick] (-50mm,-50mm) rectangle (50mm,50mm);%基本矩形
+	\draw [fill=lightgray, ultra thick] (65mm,-75mm) rectangle(75mm,75mm);%接收板
+	\draw [fill=lightgray, ultra thick] (57.5mm,-50mm) rectangle(67.5mm,100mm);%运动接收板
+	
+	\draw [fill=lightgray, ultra thick] (0mm,0mm) ellipse (15mm and 40mm);%椭圆
+	\draw [fill=lightgray, ultra thick] (45mm,0mm) circle [radius=4mm];%小圆
+	\draw [<->, thick] (0mm,90mm)--(0,0)--(90mm,0);
+	\node [below] at (0,0) {$O_1 (0,0)$};
+	\draw [fill](0,0) circle [radius=1mm];
+	\draw [fill](45mm,0) circle [radius=1mm];
+	\node [below] at (43mm,-4mm) {$O_2 (45,0)$};
+	\node [above] at (85mm,0) {$\textit{X}$};
+	\node [right] at (0mm,85mm) {$\textit{Y}$};
+%	\draw (0,-100mm)--(0,100mm);%辅助线
+%	\draw (-100mm,0)--(100mm,0);%辅助线
+	\foreach \i in {-15,-14,...,15}
+	\draw [thick,->] (-65mm, \i*4mm)--(65mm, \i*4mm);%画射线
+	\draw [fill=gray, ultra thick] (65mm,-40mm) rectangle(75mm,40mm);%椭圆投影
+	\draw [fill=black, ultra thick] (65mm,-4mm) rectangle(75mm,4mm);%圆投影
+	\draw [blue,thick]  (-7.5mm,20mm)circle[radius=65mm];%运动轨迹
+	\draw [dashed,thick] (0,0) circle[radius=65mm];%运动轨迹虚线
+	\end{tikzpicture}
+	\caption{\small{附件2中第61个方向示意}}
+	\label{附件2中第61个方向示意}
+	
+
+\end{minipage}
+\hspace{80mm}%
+\begin{minipage}{2pt}
+
+
+	\begin{tikzpicture}[scale=0.5] %%%%%61个方向Y方向
+
+%\draw[help lines] (-100mm,-100mm) grid (100mm,100mm);
+
+	\draw [thick] (-50mm,-50mm) rectangle (50mm,50mm);%基本矩形
+	\draw [fill=lightgray, ultra thick] (-75mm,65mm) rectangle(75mm,75mm);%接收板
+	
+	\draw [fill=lightgray, ultra thick] (0mm,0mm) ellipse (15mm and 40mm);%椭圆
+	\draw [fill=lightgray, ultra thick] (45mm,0mm) circle [radius=4mm];%小圆
+	\draw [<->, thick] (0mm,90mm)--(0,0)--(90mm,0);%坐标轴
+	\node [below] at (0,0) {$O_1 (0,0)$};
+	\draw [fill](0,0) circle [radius=1mm];%O1点
+	\draw [fill](45mm,0) circle [radius=1mm];%O2点
+	\node [below] at (43mm,-4mm) {$O_2 (45,0)$};
+	\node [above] at (85mm,0) {$\textit{X}$};
+	\node [right] at (0mm,85mm) {$\textit{Y}$};
+%	\draw (0,-100mm)--(0,100mm);%辅助线
+%	\draw (-100mm,0)--(100mm,0);%辅助线
+	\foreach \i in {-15,-14,...,15}
+	\draw [thick,->] (\i*4mm,-65mm)--(\i*4mm, 65mm);%画射线
+	\draw [fill=gray, ultra thick] (-40mm,65mm) rectangle(40mm,75mm);%椭圆投影
+	\draw [fill=black, ultra thick] (-4mm,65mm) rectangle(4mm,75mm);%圆投影
+	\draw [blue,thick]  (-7.5mm,20mm)circle[radius=65mm];%运动轨迹
+	\draw [dashed,thick] (0,0) circle[radius=65mm];%运动轨迹虚线
+	
+	\end{tikzpicture}
+	\caption{\small{附件 2 中第 151 个方向示意}}
+\end{minipage}
+\end{figure}
+
+\begin{tikzpicture} 
+\draw [<->, thick] (0mm,90mm)--(0,0)--(90mm,0);%坐标轴
+\draw (0,3) parabola bend (3,5) (7.5,4); 
+\draw (7.5,4) parabola bend (9,4.5) (9,4.5); %上界
+
+\draw (0,1) parabola bend (3,1) (7.5,2); 
+\draw (7.5,2) parabola bend (9,1) (9,1);
+\draw (0,0.5) parabola bend (7.5,6) (9,5); 
+\draw (0,0) parabola bend (7.5,5.5) (9,4.5); 
+\draw (9,4.5)--(9,5);
+
+\end{tikzpicture}
+
+\subsection{探测器单元之间的距离求解}
+经过上述分析，我们可通过求可探测到信息的探测器范围的总长度除以探测器单元 的数量，进而得到探测器之间的距离，如下式所示：
+\[\textit{d}_i=(\frac{\textit{t}_i}{\textit{n}_i}), i=1,2,3,4\]
 
 
 
-
-\subsection{公式1}
-\subsection{公式1}
 \subsection{公式1}
 
 
